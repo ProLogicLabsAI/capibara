@@ -1,6 +1,6 @@
 # Contributing to Open CAPIBARA
 
-Open CAPIBARA is a read-only capability registry for V0: a YAML grammar, sample catalogs,
+Open CAPIBARA is a read-only capability registry for **v0.0.1-alpha**: YAML grammar, sample catalogs,
 and (upcoming) a CLI for listing, inspecting, comparing, and exporting capability cards.
 No execution endpoint. No agent runtime. No hosted service.
 
@@ -37,7 +37,9 @@ Runtime, workflow engines, and execution integrations are out of scope for V0.
        type: <semantic-token>
    owner: <team-or-domain>
    tags: [tag1, tag2]
-   risk: low | medium | high | critical
+   risk:
+     level: low          # low | medium | high
+     notes: "..."        # optional
    ```
 
 4. **Semantic type tokens** for `inputs[].type` and `outputs[].type` — use these, not bare programming types:

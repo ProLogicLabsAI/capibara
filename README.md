@@ -8,13 +8,17 @@
 
 ## What it is
 
-**Open CAPIBARA** is a capability registry — a read-only grammar, catalog, and explorer for V0.
+**Open CAPIBARA** is a capability registry — a read-only grammar and sample catalogs for **v0.0.1-alpha**.
 
-With it you can:
+With it you can today:
 
 - **Describe** capabilities in YAML (one card per bounded action)
-- **Browse** them (discover / inspect / compare)
-- **Export** to MCP tool definitions, OpenAPI snippets, or Markdown
+- **Browse** them in the repo (`catalogs/` by domain)
+
+Coming next (same V0 intent, not shipped yet):
+
+- **Discover / inspect / compare** via CLI
+- **Export** to MCP tool definitions, OpenAPI snippets, or Markdown — the grammar defines export *targets*; the exporter is the next slice
 
 **Not** an agent framework. **Not** a workflow engine. **Not** a gateway.
 
@@ -34,7 +38,7 @@ MCP    → exposes tools
 CAPIBARA → describes capabilities (the governed layer above both)
 ```
 
-One YAML definition. Multiple projections (MCP, OpenAPI, documentation). V0 implements the description half; projection and runtime follow.
+One YAML definition. Multiple projections (MCP, OpenAPI, documentation). **v0.0.1-alpha** ships the grammar and sample catalogs; projection tooling follows.
 
 ---
 
@@ -57,25 +61,31 @@ The pattern is borrowed from analytics: metric definitions belong in a governed 
 ```
 capibara/
   schema/capability.v0.yaml    # JSON Schema — the grammar
+  schema/ROADMAP.md            # Phase 0+ field extensions (additive)
   catalogs/
     software-engineering/      # 5 example cards
     data-engineering/          # 5 example cards
     enterprise-ai/             # 5 example cards
 ```
 
-Browse `catalogs/` to see the grammar in use. Read `schema/capability.v0.yaml` to understand the card shape.
+Browse `catalogs/` to see the grammar in use. Read `schema/capability.v0.yaml` to understand the card shape; see `schema/ROADMAP.md` for planned extensions.
 
-CLI (`capibara list`, `capibara inspect <id>`, `capibara export --format mcp`) is the next slice — not yet shipped in V0.
+CLI (`capibara list`, `capibara inspect <id>`, `capibara export --format mcp`) is the next slice — not yet shipped.
 
 ---
 
-## V0 scope
+## v0.0.1-alpha scope (shipped)
 
-- YAML schema + sample catalogs — Apache-2.0
-- Read-only: describe, browse, export (export = next gene)
+- YAML schema + 15 sample catalog cards — Apache-2.0
+- Read-only: describe and browse in-repo
 - No execution endpoint, no agent runtime, no hosted service
 
-*Runtime, orchestration, and genes are out of scope for v0.*
+## Next in V0 (not shipped)
+
+- CLI: list, inspect, compare
+- Export to MCP / OpenAPI / Markdown
+
+*Runtime, orchestration, and execution are out of scope for v0.*
 
 ---
 
