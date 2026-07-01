@@ -1,0 +1,35 @@
+id: review-pull-request
+intent: Review a pull request for correctness, style, and potential regressions, and return actionable feedback to the author.
+subject: pull-request
+
+inputs:
+  - name: pr_diff
+    type: text/diff
+    required: true
+    description: The unified diff of the pull request.
+  - name: repo_context
+    type: text
+    required: false
+    description: Brief description of the repository, its tech stack, and coding conventions.
+  - name: linked_issue
+    type: identifier
+    required: false
+    description: Optional issue or ticket ID that this PR addresses.
+
+outputs:
+  - name: review_comments
+    type: json-object
+    description: Structured list of comments keyed by file and line range.
+  - name: overall_verdict
+    type: enum-label
+    description: One of approve, request-changes, or comment.
+
+owner: platform-engineering
+tags: [code-review, software-engineering, quality, developer-experience]
+
+risk:
+  level: low
+  notes: Output is advisory. Human author and reviewer retain final merge authority.
+
+semantic_refs:
+  - "policy://engineering/code-review-standards-v1"

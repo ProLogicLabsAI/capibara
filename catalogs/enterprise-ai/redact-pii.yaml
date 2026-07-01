@@ -1,0 +1,45 @@
+id: redact-pii
+intent: Identify and redact personally identifiable information from a document or data record, replacing it with type-labeled placeholders.
+subject: document
+
+inputs:
+  - name: document
+    type: text
+    required: true
+    description: The document or record to redact.
+  - name: pii_categories
+    type: json-object
+    required: false
+    description: Optional list of PII categories to target (e.g. name, email, phone, national-id). Defaults to all detected categories.
+  - name: jurisdiction
+    type: identifier
+    required: false
+    description: Legal jurisdiction for PII rules (e.g. gdpr, ccpa). Affects which fields are classified as PII.
+
+outputs:
+  - name: redacted_document
+    type: text
+    description: Document with PII replaced by typed placeholders (e.g. [NAME], [EMAIL], [PHONE]).
+  - name: redaction_log
+    type: json-object
+    description: Count and category breakdown of redacted items (no original values).
+
+owner: data-protection-team
+tags: [enterprise-ai, privacy, pii, compliance, redaction]
+
+risk:
+  level: high
+  notes: >
+    Missed PII creates regulatory and reputational risk. Redaction is probabilistic and must
+    be verified for high-stakes documents before release. Redaction log must not contain
+    original PII values.
+
+semantic_refs:
+  - "policy://data-protection/pii-classification-v1"
+  - "policy://legal/gdpr-processing-rules-v2"
+
+behavior_profiles:
+  - id: strict
+    description: Redact all detected PII including low-confidence detections; prefer false positives.
+  - id: standard
+    description: Redact high-confidence PII detections only; flag borderline items for human review.

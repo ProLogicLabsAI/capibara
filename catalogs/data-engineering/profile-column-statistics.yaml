@@ -1,0 +1,31 @@
+id: profile-column-statistics
+intent: Compute detailed statistics for a single dataset column to support contract definition, anomaly detection, and data quality monitoring.
+subject: dataset-column
+
+inputs:
+  - name: column_values
+    type: json-object
+    required: true
+    description: Array of values from the column to profile (sampled or full).
+  - name: declared_type
+    type: identifier
+    required: false
+    description: The declared data type from the data contract (for drift comparison).
+
+outputs:
+  - name: statistics
+    type: json-object
+    description: Count, null rate, unique count, min, max, mean (numeric), top values (categorical), and type distribution.
+  - name: type_match
+    type: boolean
+    description: True if observed types match the declared type; false if mismatch detected.
+
+owner: data-platform-team
+tags: [data-engineering, profiling, statistics, data-quality]
+
+risk:
+  level: low
+  notes: Read-only. Column values may be sensitive; apply data classification policy before logging or displaying output.
+
+semantic_refs:
+  - "policy://data-platform/data-classification-v1"

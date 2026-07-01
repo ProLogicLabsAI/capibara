@@ -1,0 +1,29 @@
+id: draft-pr-description
+intent: Draft a concise pull request description from a diff and linked issue, summarizing what changed and why.
+subject: pull-request
+
+inputs:
+  - name: pr_diff
+    type: text/diff
+    required: true
+    description: The unified diff of the pull request.
+  - name: linked_issue
+    type: identifier
+    required: false
+    description: Issue or ticket ID that this PR addresses.
+  - name: template_ref
+    type: identifier
+    required: false
+    description: Reference to the project's PR description template.
+
+outputs:
+  - name: pr_description
+    type: text/markdown
+    description: Drafted PR description including summary, motivation, and any relevant notes.
+
+owner: platform-engineering
+tags: [software-engineering, documentation, developer-experience, pull-request]
+
+risk:
+  level: low
+  notes: Output is a draft. The author reviews and edits before submission.

@@ -1,0 +1,34 @@
+id: answer-policy-question
+intent: Answer an employee question about an internal policy by locating the relevant policy section and returning a grounded, cited response.
+subject: policy-question
+
+inputs:
+  - name: question
+    type: text
+    required: true
+    description: The employee's natural-language question about an internal policy.
+  - name: policy_corpus_ref
+    type: identifier
+    required: true
+    description: Reference to the policy document corpus to search.
+
+outputs:
+  - name: answer
+    type: text
+    description: Grounded answer citing the applicable policy section and page.
+  - name: source_references
+    type: json-object
+    description: List of policy documents and sections that support the answer.
+  - name: confidence
+    type: enum-label
+    description: One of high, medium, or low — reflecting how clearly the policy covers the question.
+
+owner: hr-and-compliance-team
+tags: [enterprise-ai, policy, hr, compliance, knowledge-retrieval]
+
+risk:
+  level: medium
+  notes: Output is informational. Employees should confirm with HR or legal for decisions with material consequences. Low-confidence answers must be flagged.
+
+semantic_refs:
+  - "policy://hr/policy-qa-usage-guidelines-v1"

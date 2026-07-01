@@ -1,0 +1,31 @@
+id: summarize-document
+intent: Produce a concise summary of a document preserving key decisions, obligations, and action items.
+subject: document
+
+inputs:
+  - name: document
+    type: text/pdf
+    required: true
+    description: The document to summarize.
+  - name: focus_areas
+    type: json-object
+    required: false
+    description: Optional list of topics or sections to prioritize in the summary.
+
+outputs:
+  - name: summary
+    type: text/markdown
+    description: Structured summary covering key points, decisions, and recommended actions.
+  - name: key_items
+    type: json-object
+    description: Extracted list of obligations, deadlines, or action items if present.
+
+owner: knowledge-team
+tags: [enterprise-ai, summarization, knowledge, document-processing]
+
+risk:
+  level: low
+  notes: Output is advisory. Summary may omit nuance; the original document remains authoritative for legal or compliance purposes.
+
+semantic_refs:
+  - "policy://knowledge-management/summarization-policy-v1"

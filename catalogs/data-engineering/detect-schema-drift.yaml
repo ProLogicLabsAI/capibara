@@ -1,0 +1,32 @@
+id: detect-schema-drift
+intent: Compare a dataset's current observed schema against its declared data contract and report any structural or type-level deviations.
+subject: dataset
+
+inputs:
+  - name: dataset_sample
+    type: json-object
+    required: true
+    description: A representative sample of the dataset (rows or schema snapshot) as JSON.
+  - name: data_contract_ref
+    type: identifier
+    required: true
+    description: Reference to the canonical data contract for this dataset.
+
+outputs:
+  - name: drift_report
+    type: json-object
+    description: List of detected deviations, each with field name, expected type, observed type, and severity.
+  - name: drift_detected
+    type: boolean
+    description: True if any deviation was found; false if the dataset matches the contract.
+
+owner: data-platform-team
+tags: [data-engineering, schema, validation, data-quality, contract]
+
+risk:
+  level: low
+  notes: Read-only analysis. Does not modify the dataset or contract. Output feeds downstream alerting.
+
+semantic_refs:
+  - "data-contract://orders/schema-v2"
+  - "policy://data-platform/schema-governance-v1"

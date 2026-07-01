@@ -1,0 +1,231 @@
+# CAPIBARA — Capability Card Schema v0
+#
+# JSON Schema (draft-07) in YAML.
+# Grounded in the CAPIBARA foundational vocabulary (semantic type tokens; see README).
+# V0 captures the minimum viable subset; Phase 0+ extensions (effect, context, constraints[],
+# evidence, relationships[]) are documented in ROADMAP.md (same directory) without breaking V0 files.
+#
+# $id uses a placeholder domain (capibara.dev) until a stable URI is published.
+
+"$schema": "http://json-schema.org/draft-07/schema#"
+"$id": "https://capibara.dev/schema/capability.v0.yaml"
+title: CAPIBARA Capability Card v0
+description: >
+  A capability card is the atomic unit of the CAPIBARA grammar: a structured description
+  of a single bounded action. It describes what can happen, why it is activated, what it
+  needs, what it produces, who owns it, and how to govern it — without embedding prompts,
+  model names, or numeric risk thresholds.
+type: object
+additionalProperties: false
+
+required:
+  - id
+  - intent
+  - subject
+  - inputs
+  - outputs
+  - owner
+  - tags
+  - risk
+
+properties:
+
+  id:
+    type: string
+    description: >
+      Unique kebab-case identifier for this capability. Stable across model/implementation
+      changes — the name of the capability, not the name of a tool or prompt.
+    pattern: "^[a-z][a-z0-9-]*$"
+    examples:
+      - perform-dermoscopy
+      - validate-payment
+      - summarize-inbox
+      - review-pull-request
+
+  intent:
+    type: string
+    description: >
+      One sentence stating the single bounded action this capability performs. Plain language.
+      Do not embed prompt text, model names, or implementation details.
+      See foundational guide §7: model names and prompts are implementation details that
+      churn underneath the capability; the intent persists.
+    minLength: 10
+    maxLength: 500
+    examples:
+      - "Assess a skin lesion image for malignancy indicators and recommend next diagnostic steps."
+      - "Review a pull request for correctness, style, and potential regressions."
+      - "Detect drift between a dataset's current schema and its declared contract."
+
+  subject:
+    type: string
+    description: >
+      The primary entity or artifact the capability operates on. One noun phrase.
+    minLength: 1
+    examples:
+      - skin-lesion-image
+      - pull-request
+      - dataset
+      - document
+      - payment-transaction
+
+  inputs:
+    type: array
+    description: What the capability requires to run.
+    minItems: 1
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+          description: Input parameter name (snake_case).
+          pattern: "^[a-z][a-z0-9_]*$"
+        type:
+          type: string
+          description: >
+            Semantic type token (a string label, not a JSON Schema primitive). Use domain
+            vocabulary: text, text/diff, text/code, text/markdown, text/yaml, text/pdf,
+            image, pdf, json-object, url, identifier, enum-label, boolean, flag.
+            Compound tokens use a slash (e.g. text/diff). Do not use programming-language
+            names alone (e.g. avoid bare "string" or "object").
+          pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*(/[a-z][a-z0-9]*(-[a-z0-9]+)*)?$"
+          examples:
+            - text
+            - text/diff
+            - json-object
+            - identifier
+            - enum-label
+            - boolean
+        required:
+          type: boolean
+          description: Whether this input is required. Defaults to true if omitted.
+          default: true
+        description:
+          type: string
+          description: Optional one-sentence clarification of what this input contains.
+
+  outputs:
+    type: array
+    description: What the capability produces.
+    minItems: 1
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+          description: Output parameter name (snake_case).
+          pattern: "^[a-z][a-z0-9_]*$"
+        type:
+          type: string
+          description: >
+            Semantic type token (a string label, not a JSON Schema primitive). Same token
+            vocabulary as inputs[].type: text, text/diff, json-object, identifier,
+            enum-label, boolean, flag, etc. Compound tokens use a slash (e.g. text/markdown).
+          pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*(/[a-z][a-z0-9]*(-[a-z0-9]+)*)?$"
+          examples:
+            - json-object
+            - enum-label
+            - text/markdown
+            - boolean
+        description:
+          type: string
+          description: Optional one-sentence clarification of what this output contains.
+
+  owner:
+    type: string
+    description: >
+      Team, domain, or role responsible for this capability. A string identifier, not a
+      user ID or email. Used for discovery and governance, not authentication.
+    minLength: 1
+    examples:
+      - dermatology-team
+      - platform-engineering
+      - risk-office
+      - knowledge-team
+
+  tags:
+    type: array
+    description: Discovery labels. At least one required.
+    minItems: 1
+    items:
+      type: string
+      pattern: "^[a-z][a-z0-9-]*$"
+    examples:
+      - [diagnosis, dermoscopy, healthcare]
+      - [code-review, software-engineering, quality]
+      - [schema, data-engineering, validation]
+
+  risk:
+    type: object
+    description: >
+      Governance signal for this capability. level is an enum — do not embed numeric
+      thresholds or scoring rubrics here; those belong in semantic_refs.
+    additionalProperties: false
+    required:
+      - level
+    properties:
+      level:
+        type: string
+        description: Coarse risk classification.
+        enum:
+          - low
+          - medium
+          - high
+      notes:
+        type: string
+        description: >
+          Plain-language notes on why this risk level was assigned and what constraints
+          apply. Do not embed numeric thresholds; reference them via semantic_refs.
+        maxLength: 500
+
+  semantic_refs:
+    type: array
+    description: >
+      URIs that carry the domain-specific meaning this capability defers to: policy
+      documents, quality rubrics, data contracts, legal references, validation standards.
+      This is the separation invariant: the capability card stays portable and
+      domain-agnostic; domain rules live in the referenced documents.
+      See foundational guide §6 (Constraint, Evidence) and grammar doc §semantic_refs.
+    items:
+      type: string
+      description: URI or policy reference (any scheme; opaque to CAPIBARA v0).
+      examples:
+        - "policy://risk/classification-rubric-v1"
+        - "data-contract://orders/schema-v2"
+        - "https://example.org/standards/dermoscopy-criteria"
+
+  behavior_profiles:
+    type: array
+    description: >
+      Named invocation modes for this capability. Behavior is a parameter, not a fork —
+      the same capability card describes conservative and aggressive behavior profiles
+      rather than creating two separate catalog entries.
+      See foundational guide §4 (Behavior term) and capability-layer-v0 invariant #4.
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - description
+      properties:
+        id:
+          type: string
+          description: Kebab-case profile identifier.
+          pattern: "^[a-z][a-z0-9-]*$"
+          examples:
+            - conservative
+            - aggressive
+            - fast
+            - thorough
+        description:
+          type: string
+          description: One sentence explaining what this profile changes about how the capability runs.
+          minLength: 10
+          maxLength: 300

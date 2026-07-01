@@ -1,0 +1,33 @@
+id: extract-obligations
+intent: Extract legally or contractually binding obligations from a contract or policy document, structured by party and deadline.
+subject: contract-document
+
+inputs:
+  - name: document
+    type: text/pdf
+    required: true
+    description: The contract or policy document to analyze.
+  - name: party_names
+    type: json-object
+    required: false
+    description: List of party names to disambiguate obligations by owner.
+
+outputs:
+  - name: obligations
+    type: json-object
+    description: List of obligations, each with responsible party, description, deadline, and source clause reference.
+  - name: ambiguous_clauses
+    type: json-object
+    description: Clauses that could not be clearly resolved into structured obligations, flagged for legal review.
+
+owner: legal-team
+tags: [enterprise-ai, legal, contracts, compliance, extraction]
+
+risk:
+  level: high
+  notes: >
+    Output must be reviewed by qualified legal counsel before use in any binding decision.
+    Extraction errors carry legal risk. Do not use output as a substitute for legal advice.
+
+semantic_refs:
+  - "policy://legal/contract-review-standards-v1"

@@ -1,0 +1,31 @@
+id: analyze-dataset
+intent: Produce a descriptive statistical profile of a dataset including distributions, nulls, cardinalities, and potential anomalies.
+subject: dataset
+
+inputs:
+  - name: dataset_ref
+    type: identifier
+    required: true
+    description: Reference to the dataset or table to profile.
+  - name: columns_of_interest
+    type: json-object
+    required: false
+    description: Optional list of column names to focus the analysis on. Profiles all columns if omitted.
+
+outputs:
+  - name: profile_report
+    type: json-object
+    description: Per-column statistics including count, null rate, min, max, mean, cardinality, and top values.
+  - name: anomalies
+    type: json-object
+    description: List of detected anomalies or unexpected patterns worthy of investigation.
+
+owner: data-platform-team
+tags: [data-engineering, profiling, analytics, exploration]
+
+risk:
+  level: low
+  notes: Read-only. May expose sensitive column values in the anomaly report — handle output according to data classification policy.
+
+semantic_refs:
+  - "policy://data-platform/data-classification-v1"

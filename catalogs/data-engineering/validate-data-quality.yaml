@@ -1,0 +1,31 @@
+id: validate-data-quality
+intent: Run a suite of data quality checks against a dataset and produce a quality scorecard with pass/fail results per rule.
+subject: dataset
+
+inputs:
+  - name: dataset_ref
+    type: identifier
+    required: true
+    description: Reference to the dataset or table to be validated.
+  - name: quality_rules_ref
+    type: identifier
+    required: true
+    description: Reference to the quality rule set to apply (from the data contract or a standalone rules file).
+
+outputs:
+  - name: quality_scorecard
+    type: json-object
+    description: Per-rule pass/fail results, row counts, and a summary quality score.
+  - name: failed_rules
+    type: json-object
+    description: List of rules that failed, with examples of violating rows where available.
+
+owner: data-platform-team
+tags: [data-engineering, data-quality, validation, monitoring]
+
+risk:
+  level: low
+  notes: Read-only. Does not modify the dataset. Failed rules trigger alerts; remediation is a separate capability.
+
+semantic_refs:
+  - "policy://data-platform/quality-rule-taxonomy-v1"

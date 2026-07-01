@@ -1,0 +1,35 @@
+id: triage-ci-failure
+intent: Analyze a CI pipeline failure log, identify the root cause, and suggest a remediation path.
+subject: ci-failure-log
+
+inputs:
+  - name: failure_log
+    type: text
+    required: true
+    description: Full or truncated CI pipeline failure output.
+  - name: pipeline_config_ref
+    type: identifier
+    required: false
+    description: Reference to the CI pipeline configuration file for additional context.
+  - name: recent_commits
+    type: text
+    required: false
+    description: Summary of recent commits or diff to help correlate the failure.
+
+outputs:
+  - name: root_cause_summary
+    type: text
+    description: Plain-language diagnosis of what caused the failure.
+  - name: suggested_fix
+    type: text
+    description: Recommended next step to resolve the failure.
+  - name: confidence
+    type: enum-label
+    description: One of high, medium, or low — reflecting certainty of the diagnosis.
+
+owner: platform-engineering
+tags: [software-engineering, ci-cd, debugging, developer-experience]
+
+risk:
+  level: low
+  notes: Output is advisory. Engineer confirms and applies any fix.

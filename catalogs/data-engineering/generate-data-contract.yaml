@@ -1,0 +1,32 @@
+id: generate-data-contract
+intent: Draft a data contract for a dataset by inferring schema, semantics, and quality expectations from a sample and domain description.
+subject: dataset
+
+inputs:
+  - name: dataset_sample
+    type: json-object
+    required: true
+    description: A representative sample of the dataset used to infer schema and field types.
+  - name: domain_description
+    type: text
+    required: false
+    description: Plain-language description of what the dataset represents and how it is used.
+  - name: existing_contract_ref
+    type: identifier
+    required: false
+    description: Reference to an existing partial contract to extend rather than create from scratch.
+
+outputs:
+  - name: data_contract_draft
+    type: text/yaml
+    description: Draft data contract in YAML covering schema, field semantics, and basic quality rules.
+
+owner: data-platform-team
+tags: [data-engineering, contract, documentation, data-quality]
+
+risk:
+  level: low
+  notes: Output is a draft for data owner review. Quality rules are inferred and must be validated by the domain expert before use.
+
+semantic_refs:
+  - "policy://data-platform/data-contract-template-v1"

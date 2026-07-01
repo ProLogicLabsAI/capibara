@@ -1,0 +1,32 @@
+id: explain-legacy-code
+intent: Produce a plain-language explanation of a legacy code block, including its purpose, data flow, and side effects.
+subject: code-block
+
+inputs:
+  - name: code
+    type: text/code
+    required: true
+    description: The source code block to explain.
+  - name: language
+    type: identifier
+    required: false
+    description: Programming language of the code block (e.g. cobol, python, java).
+  - name: surrounding_context
+    type: text
+    required: false
+    description: File or module context that helps interpret the code's role.
+
+outputs:
+  - name: explanation
+    type: text
+    description: Plain-language explanation of what the code does, why it exists, and what it affects.
+  - name: identified_risks
+    type: json-object
+    description: List of potential maintenance risks or unclear patterns found in the code.
+
+owner: platform-engineering
+tags: [software-engineering, legacy, documentation, knowledge-transfer]
+
+risk:
+  level: low
+  notes: Read-only analysis. Does not modify code. Explanations may miss runtime context not visible in static code.

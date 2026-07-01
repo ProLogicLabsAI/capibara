@@ -1,0 +1,32 @@
+id: generate-adr
+intent: Draft an Architecture Decision Record (ADR) capturing the context, decision, and consequences of a significant technical choice.
+subject: technical-decision
+
+inputs:
+  - name: decision_summary
+    type: text
+    required: true
+    description: One or two sentences describing the decision that needs to be recorded.
+  - name: context_notes
+    type: text
+    required: false
+    description: Background, constraints, alternatives considered, and forces at play.
+  - name: adr_template_ref
+    type: identifier
+    required: false
+    description: Reference to the project's ADR template (if non-standard format is required).
+
+outputs:
+  - name: adr_draft
+    type: text/markdown
+    description: A complete ADR document in Markdown following the project template.
+
+owner: platform-engineering
+tags: [software-engineering, architecture, documentation, decision-records]
+
+risk:
+  level: low
+  notes: Output is a draft for human review and approval. Does not constitute a binding architectural decision until accepted by the team.
+
+semantic_refs:
+  - "policy://engineering/adr-template-v1"
