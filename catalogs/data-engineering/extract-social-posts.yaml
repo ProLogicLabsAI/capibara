@@ -1,0 +1,32 @@
+id: extract-social-posts
+intent: Extract public social post data from a source URL or account reference into a structured dataset.
+subject: social-post-data
+
+inputs:
+  - name: source_ref
+    type: url
+    required: true
+    description: Public profile, post, search, or list URL to extract.
+  - name: extraction_options
+    type: json-object
+    required: false
+    description: Optional extraction filters such as result limits or requested fields.
+
+outputs:
+  - name: extracted_posts
+    type: json-object
+    description: Structured post records and pagination metadata.
+  - name: extraction_summary
+    type: json-object
+    description: Counts, warnings, and source context for downstream validation.
+
+owner: data-platform-team
+tags: [data-engineering, extraction, social-data]
+
+risk:
+  level: medium
+  notes: Reads public social data. Apply consent, platform policy, and data retention controls before use.
+
+semantic_refs:
+  - "https://xquik.com/openapi.json"
+  - "https://docs.xquik.com/mcp/overview"
