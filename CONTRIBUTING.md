@@ -67,6 +67,10 @@ Runtime, workflow engines, and execution integrations are out of scope for V0.
    - No model names (`gpt-4`, `claude`, etc.) anywhere
    - `behavior_profiles` used only when the card genuinely has distinct behavioral modes
    - `type` values use the semantic token vocabulary, not bare `string`/`object`
+   - `semantic_refs` does not point solely to one commercial vendor's product, docs, or API as
+     the card's only reference — use vendor-neutral standards, specs, or policy docs instead.
+     A capability describes a possibility, not a product; cards that read as promotion for a
+     specific paid tool will be rejected regardless of schema validity.
 
 6. Validate against the schema (once the CLI ships):
 
@@ -84,6 +88,8 @@ Runtime, workflow engines, and execution integrations are out of scope for V0.
 - Conventional commits: `feat(catalogs): add <id> capability`, `fix(schema): ...`
 - Link to an issue if one exists; otherwise a short description in the PR body is fine
 - All contributions are licensed under [Apache-2.0](LICENSE)
+- PRs that are part of an automated bulk campaign (same card/wording pattern opened across many
+  unrelated repos to promote one vendor) are closed without merge, regardless of schema validity
 
 ---
 
