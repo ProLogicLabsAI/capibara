@@ -8,19 +8,17 @@
 
 ## What it is
 
-**Open CAPIBARA** is a capability registry — a read-only grammar and sample catalogs for **v0.0.1-alpha**.
+**Open CAPIBARA** is a capability registry — a read-only grammar, sample catalogs, and a CLI, for **v0.0.1-alpha**.
 
 With it you can today:
 
 - **Describe** capabilities in YAML (one card per bounded action)
-- **Browse** them in the repo (`catalogs/` by domain)
+- **Browse** them in the repo (`catalogs/` by domain) or via `capibara list` / `capibara inspect`
+- **Validate** cards against the grammar plus gate invariants (`capibara validate`)
+- **Compare** two cards structurally (`capibara compare`)
+- **Export** to MCP tool definitions, an OpenAPI stub, or Markdown (`capibara export`)
 
-Coming next (same V0 intent, not shipped yet):
-
-- **Discover / inspect / compare** via CLI
-- **Export** to MCP tool definitions, OpenAPI snippets, or Markdown — the grammar defines export *targets*; the exporter is the next slice
-
-**Not** an agent framework. **Not** a workflow engine. **Not** a gateway.
+**Not** an agent framework. **Not** a workflow engine. **Not** a gateway. `capibara` has no `run` command and never will in V0 — it describes and browses capabilities, it does not invoke them.
 
 The unit is the capability: **a named possibility that something can happen** — before identity, before systems, before anything runs. The capability persists when models change, frameworks churn, and teams reorganize.
 
@@ -38,7 +36,7 @@ MCP    → exposes tools
 CAPIBARA → describes capabilities (the governed layer above both)
 ```
 
-One YAML definition. Multiple projections (MCP, OpenAPI, documentation). **v0.0.1-alpha** ships the grammar and sample catalogs; projection tooling follows.
+One YAML definition. Multiple projections (MCP, OpenAPI, documentation). **v0.0.1-alpha** ships the grammar, sample catalogs, and a read-only CLI for validation, discovery, comparison, and export.
 
 ---
 
@@ -70,20 +68,42 @@ capibara/
 
 Browse `catalogs/` to see the grammar in use. Read `schema/capability.v0.yaml` to understand the card shape; see `schema/ROADMAP.md` for planned extensions.
 
-CLI (`capibara list`, `capibara inspect <id>`, `capibara export --format mcp`) is the next slice — not yet shipped.
+### CLI
+
+```bash
+make dev                     # create .venv, install capibara + dev deps (editable)
+.venv/bin/capibara --help
+```
+
+```bash
+# Validate every card against the grammar + gate invariants (defaults to catalogs/)
+capibara validate
+
+# Browse: table of id, domain, subject, owner, risk, tags — with filters
+capibara list --domain software-engineering --search review
+
+# Full detail for one card
+capibara inspect review-pull-request
+
+# Structural diff between two cards (scalars, then shared / only-in-A / only-in-B)
+capibara compare review-pull-request draft-pr-description
+
+# Project one card or the whole catalog: MCP tool JSON, an OpenAPI stub (YAML), or Markdown
+capibara export review-pull-request --format mcp
+capibara export --format openapi          # whole catalog, one :invoke path per card
+```
+
+The OpenAPI export is a **projection stub** — one `POST /capabilities/{id}:invoke` path per
+card, derived only from `inputs`/`outputs` — not a generated, runnable API implementation.
 
 ---
 
 ## v0.0.1-alpha scope (shipped)
 
 - YAML schema + 15 sample catalog cards — Apache-2.0
-- Read-only: describe and browse in-repo
-- No execution endpoint, no agent runtime, no hosted service
-
-## Next in V0 (not shipped)
-
-- CLI: list, inspect, compare
-- Export to MCP / OpenAPI / Markdown
+- Read-only CLI: `validate`, `list`, `inspect`, `compare`, `export --format mcp|openapi|md`
+- Read-only: describe, browse, and export in-repo
+- No execution endpoint, no agent runtime, no hosted service — no `capibara run`
 
 *Runtime, orchestration, and execution are out of scope for v0.*
 

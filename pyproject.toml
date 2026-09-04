@@ -1,0 +1,39 @@
+[project]
+name = "capibara"
+version = "0.0.1a0"
+description = "Open CAPIBARA — a read-only capability registry: grammar, catalogs, and CLI."
+requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "typer>=0.12",
+    "pyyaml>=6",
+    "jsonschema>=4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+capibara = "capibara.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/capibara"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"schema" = "capibara/schema"
+"catalogs" = "capibara/catalogs"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
