@@ -1,13 +1,15 @@
 ---
 id: gene.intent.capibara-v0-core
 title: CAPIBARA V0 core — schema, catalogs, read-only CLI
-status: in_progress
+status: done
 target_repo: capibara
 summary: >
   Ship Open CAPIBARA V0: capability.v0.yaml grammar, three sample catalogs (15 cards),
   Apache-2.0 public repo, and read-only Typer CLI (list, inspect, compare, export to
   MCP/OpenAPI/Markdown). v0.0.1-alpha (grammar + catalogs) shipped; CLI/export remain.
   No execution endpoint, no agent runtime, no proprietary runtime branding in README.
+notes:
+  merged_pr: "https://github.com/ProLogicLabsAI/capibara/pull/3"
 acceptance_criteria:
   - "schema/capability.v0.yaml validates all YAML files under catalogs/"
   - "CLI: capibara list, inspect <id>, compare <a> <b>, export --format mcp|openapi|md"

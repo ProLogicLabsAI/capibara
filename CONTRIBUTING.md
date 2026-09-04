@@ -1,7 +1,7 @@
 # Contributing to Open CAPIBARA
 
 Open CAPIBARA is a read-only capability registry for **v0.0.1-alpha**: YAML grammar, sample catalogs,
-and (upcoming) a CLI for listing, inspecting, comparing, and exporting capability cards.
+and a CLI for validating, listing, inspecting, comparing, and exporting capability cards.
 No execution endpoint. No agent runtime. No hosted service.
 
 ---
@@ -56,13 +56,18 @@ Runtime, workflow engines, and execution integrations are out of scope for V0.
    | `identifier` | A name, slug, or key (not a bare string) |
    | `enum-label` | One value from a fixed set |
    | `boolean` | True/false flag |
+   | `flag` | Boolean-shaped switch (synonym of `boolean` for flag-like fields) |
    | `image` | Image file or bytes |
    | `url` | A URL |
 
-   Avoid bare `string` or `object` — these are JSON Schema primitives, not semantic types.
+   Avoid bare `string` or `object` — these are JSON Schema primitives, not semantic types. `capibara
+   validate` rejects bare `string`/`object` as an error; a token outside this table is a warning, not
+   an error, so a deliberate new domain token is never blocked outright.
 
 5. **Gate invariants** — your card must pass all of these before merging:
    - All required fields present
+   - `id` matches the filename stem
+   - `id` is unique across the catalog
    - No embedded prompt text in any field
    - No model names (`gpt-4`, `claude`, etc.) anywhere
    - `behavior_profiles` used only when the card genuinely has distinct behavioral modes
@@ -72,13 +77,15 @@ Runtime, workflow engines, and execution integrations are out of scope for V0.
      A capability describes a possibility, not a product; cards that read as promotion for a
      specific paid tool will be rejected regardless of schema validity.
 
-6. Validate against the schema (once the CLI ships):
+6. Validate against the schema plus the gate invariants above:
 
    ```bash
-   capibara validate catalogs/<domain>/<your-file>.yaml
+   make dev   # once, to create .venv
+   .venv/bin/capibara validate catalogs/<domain>/<your-file>.yaml
    ```
 
-   Until then, validate manually with any JSON Schema draft-07 validator pointed at `schema/capability.v0.yaml`.
+   `capibara validate` with no path defaults to every card under `catalogs/`. See `make test` /
+   `make lint` in the [Makefile](Makefile) for the full dev loop.
 
 ---
 

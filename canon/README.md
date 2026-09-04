@@ -10,7 +10,7 @@
 
 | File | Status | Notes |
 |------|--------|--------|
-| `gene.intent.capibara-v0-core.yaml` | in_progress | v0.0.1-alpha shipped (schema + catalogs); CLI + export next |
+| `gene.intent.capibara-v0-core.yaml` | done | v0.0.1-alpha shipped: schema, catalogs, and read-only CLI (validate/list/inspect/compare/export) |
 
 ## Focus loop
 

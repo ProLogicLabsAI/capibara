@@ -1,0 +1,32 @@
+# Invalid CAPIBARA capability card — negative fixture for `capibara validate`.
+# Embeds a numeric risk threshold directly on the card, violating the grammar
+# invariant (numeric thresholds belong in a semantic_refs policy document, not
+# the card itself). Schema rejects it via risk.additionalProperties: false.
+
+id: invalid-embedded-threshold
+intent: Classify a document or transaction into risk categories for human review and downstream routing.
+subject: document
+
+inputs:
+  - name: document
+    type: text
+    required: true
+    description: The document or transaction record to be assessed.
+
+outputs:
+  - name: risk_classification
+    type: json-object
+    description: Assigned risk category, confidence signal, and rationale summary.
+
+owner: risk-office
+
+tags:
+  - risk
+  - compliance
+
+risk:
+  level: high
+  threshold: 0.85
+  notes: >
+    Invalid: threshold is an inline numeric value on the card itself, not a
+    reference to a policy document via semantic_refs.
